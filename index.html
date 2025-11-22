@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CGATS Chart ΔE Viewer</title>
+
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;600&family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <!-- Local styles (font helpers etc.) -->
+  <link rel="stylesheet" href="app.css" />
+
+  <style>
+    /* Make each patch square regardless of layout */
+    .patch-square {
+      aspect-ratio: 1 / 1;
+    }
+  </style>
+</head>
+
+<body class="bg-teal-950 text-teal-50 min-h-screen font-[var(--font-quicksand,_system-ui)]">
+  <div class="max-w-7xl mx-auto py-8 px-4">
+
+    <header class="sticky top-0 z-20 bg-teal-950/95 backdrop-blur border-b border-teal-800 mb-4">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-4">
+
+        <!-- Title with DynaPuff -->
+        <h1
+          class="text-2xl font-semibold font-quicksand"
+          style="font-family: var(--font-quicksand, 'Quicksand', system-ui);"
+        >
+          CGATS Chart ΔE Viewer
+        </h1>
+
+        <!-- File inputs + stats to the right -->
+        <div class="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(260px,0.8fr)] items-start">
+
+          <!-- Reference -->
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-quicksand font-medium">Reference chart (CGATS)</span>
+            <input
+              id="refFile"
+              type="file"
+              multiple
+              accept=".txt,.cgats,.cie,.dat"
+              class="block w-full text-sm text-slate-200
+                     file:mr-4 file:py-2 file:px-4
+                     file:rounded-md file:border-0
+                     file:text-sm file:font-semibold
+                     file:bg-emerald-700 file:text-white
+                     hover:file:bg-emerald-600"
+            />
+            <!-- List of all files used in averaged reference -->
+            <div id="refFilesList" class="text-xs text-slate-300 line-clamp-2"></div>
+          </div>
+
+          <!-- Sample -->
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-quicksand font-medium">Sample chart (CGATS)</span>
+            <input
+              id="sampleFile"
+              type="file"
+              multiple
+              accept=".txt,.cgats,.cie,.dat"
+              class="block w-full text-sm text-slate-200
+                     file:mr-4 file:py-2 file:px-4
+                     file:rounded-md file:border-0
+                     file:text-sm file:font-semibold
+                     file:bg-emerald-700 file:text-white
+                     hover:file:bg-emerald-600"
+            />
+            <!-- List of all files used in averaged sample -->
+            <div id="sampleFilesList" class="text-xs text-slate-300 line-clamp-2"></div>
+          </div>
+
+          <!-- Stats + mode toggle -->
+          <div class="flex flex-col gap-2">
+            <div
+              id="statsPanel"
+              class="min-w-[230px] text-[11px] bg-slate-800/80 border border-slate-700 rounded-lg p-2"
+            >
+              <div class="font-semibold text-slate-100 mb-1 text-xs">
+                ΔE00 statistics
+              </div>
+              <div class="text-[11px] text-slate-300">
+                Load a reference and sample chart to see statistics.
+              </div>
+            </div>
+
+            <label class="inline-flex items-center gap-1 text-xs text-slate-300 ml-auto">
+              <input
+                id="modeToggle"
+                type="checkbox"
+                class="accent-emerald-400"
+                disabled
+              />
+              <span id="modeToggleLabel">Show ΔE heatmap</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Mode + summary -->
+        <div class="flex flex-wrap items-center gap-4 text-sm text-slate-200">
+          <span>
+            Mode:
+            <span id="modeLabel" class="font-semibold text-emerald-400">
+              Color (reference chart)
+            </span>
+          </span>
+
+          <span id="summary" class="text-slate-400"></span>
+        </div>
+
+        <!-- Debug toggle + panel -->
+        <div class="mb-1 text-xs text-slate-300">
+          <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+            <input
+              id="debugToggle"
+              type="checkbox"
+              class="h-3 w-3 rounded border-slate-500 bg-teal-950 text-emerald-600"
+            />
+            <span>Show layout debug info</span>
+          </label>
+
+          <div
+            id="debugPanel"
+            class="hidden mt-2 rounded-md border border-slate-700 bg-slate-900/60 px-2 py-2"
+          >
+            <pre
+              id="debugText"
+              class="whitespace-pre-wrap text-[10px] leading-snug text-slate-200"
+            ></pre>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 overflow-auto">
+      <div class="max-w-6xl mx-auto px-4 py-4">
+        <div id="chartContainer" class="space-y-6">
+          <!-- Pages will be injected here -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
